@@ -1,18 +1,22 @@
 const fs = require ('fs')
 const Discord = require('discord.js')
-var sunucuyaözelayarlarOtorol = JSON.parse(fs.readFileSync("./otorol.json", "utf8"));
+var sunucuyaözelayarlarOtorol = JSON.parse(fs.readFileSync("././sunucuyaözelayarlar/otorol.json", "utf8"));
 
 
 exports.run = async (bot, message, args) =>
 {
-  	let profil = JSON.parse(fs.readFileSync("./otorol.json", "utf8"));
+  	let profil = JSON.parse(fs.readFileSync("././sunucuyaözelayarlar/otorol.json", "utf8"));
   var mentionedChannel = message.mentions.channels.first();
-  if (!mentionedChannel && args[0] !== "sıfırla") return message.channel.send("**Otomatik Rol Sistemi Bilgi** \n\n Kullanım: `!!otorol @Verilecek Rol #Otorol Mesaj Kanalı` ");
+  const o1 = new Discord.RichEmbed()
+  .setTitle('Otorol ayarlama:')
+  .setDescription('Otorolü ayarlamak için bir rol etiketlemelisin. Otorol kanalıda ayarlamayı unutma! Bu arada rolü benden altta yapman lazım yoksa rolü veremem.')
+  .setColor('RANDOM')
+  if (!mentionedChannel && args[0] !== "sıfırla") return message.channel.send(o1);
   if (message.guild.member(message.author.id).hasPermission(0x8))
     
     {
       var mentionedRole = message.mentions.roles.first();
-      if (!mentionedRole) return message.channel.send("**Doğru Kullanım = !!otorol @<roladı> #<metinkanalı>**".then(msg => msg.delete(5000)));
+      if (!mentionedRole) return message.channel.send('Doğru Kullanım = {prefix}otorol @<roladı> #<metinkanalı>').then(msg => msg.delete(5000));
       
 
 	if(!profil[message.guild.id]){
@@ -27,15 +31,17 @@ exports.run = async (bot, message, args) =>
 	profil[message.guild.id].sayi = mentionedRole.id
   profil[message.guild.id].kanal = mentionedChannel.id
 	
-	fs.writeFile("./otorol.json", JSON.stringify(profil), (err) => {
+	fs.writeFile("././sunucuyaözelayarlar/otorol.json", JSON.stringify(profil), (err) => {
 		console.log(err)
 
 	})
 
-	
-		message.channel.send("<a:onay11:616310053267439675> ◆ **Otorol Ayarlandı** ◆ \n\n┏╋━━━━◥◣◆◢◤━━━━╋┓\n\nOtorol bu sunucuda aktif edildi. \n\nKapatmak için `!!otorol-kapat` yazabilirsin.\n\n┗╋━━━━◥◣◆◢◤━━━━╋┛")
-        
-		
+	const embed = new Discord.RichEmbed()
+  .setTitle('Otorol ayarlandı!')
+		.setDescription(`Otorol bu sunucuda ${args[0]} olarak ayarlandı! Otorol kanalı ise ${mentionedChannel} olarak ayarlandı`)
+		.setColor("RANDOM")
+		.setTimestamp()
+	message.channel.send({embed})
 }
 
 }
@@ -46,12 +52,14 @@ exports.conf =
 {
   enabled: true,
   guildOnly: true,
-  aliases: ["setautorole", "otorol", "otoroldeğiştir"]
+  aliases: ["setautorole", "otorol", "otoroldeğiştir","otorol-ayarla"],
+  permLevel: 3,
+  kategori: "moderasyon"
 }
 
 exports.help =
 {
-  name: 'otorol-ayarla',
+  komut: 'otorol',
   description: 'Sunucuya Girenlere Verilecek Olan Otorolü Ayarlar.',
   usage: 'otorolayarla'
 }

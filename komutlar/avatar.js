@@ -1,35 +1,28 @@
-const Discord = require('discord.js');
-
-exports.run = (client, message, args) => {
-    
-    let user = message.mentions.users.first() || message.author
-    if (!user) return message.reply("Avatarını almak istediğin kişiyi etiketlemelisin!")
-    
-    const avatar = new Discord.RichEmbed()
-        .setColor("AEDD13")
-        .setAuthor(user.tag, user.avatarURL)
-        .setDescription(`[Avatar Linki Burada](${user.avatarURL})`)
-        .setImage(user.avatarURL)
-        message.react('616152962296840193')
-    
-    message.channel.send(avatar)
-    
-};
-
+ exports.run = (client, msg, args) => {
+   let member = msg.mentions.members.first()
+   if(!member)return msg.channel.send({embed: {
+ color: Math.floor(Math.random() * (0xFFFFFF + 1)),
+ description: ('Kimin Avatarına Bakmak İstiyon!')
+}});
+   const Discord = require('discord.js')
+        const kullanicibilgimk = new Discord.RichEmbed()
+        .setTitle(member.user.tag+" kullanıcısının profil fotoğrafı!")
+        .setImage(member.user.avatarURL)
+        .setFooter("naynbuckweet#3156", "https://cdn.discordapp.com/avatars/509337312547700754/512196d2ef1e12e2807cfd6e16f03a15.png?size=2048")
+        return msg.channel.send(kullanicibilgimk);
+    }
+	
+	
 exports.conf = {
-  enabled: true, 
-  guildOnly: false, 
-  aliases: ["pp"],
+  enabled: true,
+  guildOnly: false,
+  aliases: [],
   permLevel: 0,
-    kategori: "kullanıcı",
-  category: "user"
-};
-
-exports.help = {
-  name: 'avatar',
-  description: 'Avatarınızı gösterir.',
-  usage: 'avatar veya avatar <@kullanıcı>',
-  enname: 'avatar',
-  endescription: 'It shows your avatar.',
-  enusage: 'avatar or avatar <@user>'
-};
+  kategori: "kullanıcı"
+ };
+ 
+ exports.help = {
+ komut: 'avatar',
+ description: 'Avatarınızı veya etiketlediğiniz kişinin avatarını atar.',
+ usage: 'avatar & avatar [@Kişi]'
+ }

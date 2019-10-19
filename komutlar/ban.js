@@ -12,8 +12,6 @@ exports.run = (client, message, args) => {
   let guild = message.guild
   let reason = args.slice(1).join(' ');
   let user = message.mentions.users.first();
-  let modlog = guild.channels.find('name', 'ceza-takip');
-  if (!modlog) return message.reply('`ceza-takip` kanalını bulamıyorum.');
   if (reason.length < 1) return message.reply('Ban sebebini yazmalısın.');
   if (message.mentions.users.size < 1) return message.reply('Kimi banlayacağını yazmalısın.').catch(console.error);
 
@@ -21,23 +19,25 @@ exports.run = (client, message, args) => {
   message.guild.ban(user, 2);
 
   const embed = new Discord.RichEmbed()
-    .setColor("AEDD13")
+    .setColor(0x00AE86)
     .setTimestamp()
-    .setTitle(' | Bir kullanıcı sunucudan yasaklandı!')
-    .addField('Yasaklanan Kullanıcı:', `${user.username}#${user.discriminator} (${user.id})`)
-    .addField('Yasaklama Sebebi:', reason);
-  return guild.channels.get(modlog.id).sendEmbed(embed);
+    .addField('Eylem:', 'Ban')
+    .addField('Kullanıcı:', `${user.username}#${user.discriminator} (${user.id})`)
+    .addField('Yetkili:', `${message.author.username}#${message.author.discriminator}`)
+    .addField('Sebep', reason);
+  return message.channel.send(embed);
 };
 
 exports.conf = {
   enabled: true,
   guildOnly: true,
   aliases: [],
-  permLevel: 2
+  permLevel: 2,
+  kategori: "moderasyon"
 };
 
 exports.help = {
-  name: 'ban',
+  komut: 'ban',
   description: 'İstediğiniz kişiyi banlar.',
   usage: 'ban [kullanıcı] [sebep]'
 };

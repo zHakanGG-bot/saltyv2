@@ -6,36 +6,36 @@ exports.run = (client, message, args) => {
   .setTimestamp()
   .setAuthor(message.author.username, message.author.avatarURL)
   .addField(':warning: Uyarı :warning:', '`kick` adlı komutu özel mesajlarda kullanamazsın.')
-  return message.author.send(ozelmesajuyari); }
+  return message.author.sendEmbed(ozelmesajuyari); }
   let guild = message.guild
   let reason = args.slice(1).join(' ');
   let user = message.mentions.users.first();
-  let modlog = guild.channels.find('name', 'ceza-takip');
-  if (!modlog) return message.reply('`ceza-takip` kanalı oluşturman lazım.');
-  if (reason.length < 1) return message.channel.send(' | Lütfen bir sebep belirtin!');
-  if (message.mentions.users.size < 1) return message.reply(' | Sunucudan kimi atacağımı yazmadın!').catch(console.error);
+  if (reason.length < 1) return message.reply('Sunucudan atma sebebini yazmalısın.');
+  if (message.mentions.users.size < 1) return message.reply('Kimi sunucudan atacağını yazmalısın.').catch(console.error);
 
-  if (!message.guild.member(user).kickable) return message.reply(' | Yetkilileri sunucudan atamam.');
+  if (!message.guild.member(user).kickable) return message.reply('Yetkilileri sunucudan atamam.');
   message.guild.member(user).kick();
 
   const embed = new Discord.RichEmbed()
-    .setColor("AEDD13")
+    .setColor(0x00AE86)
     .setTimestamp()
-    .setTitle('< | Bir kullanıcı sunucudan atıldı!')
-    .addField('Atılan Kullanıcı:', `${user.username}#${user.discriminator} (${user.id})`)
-    .addField('Atılma Sebebi:', reason);
-  return guild.channels.get(modlog.id).send(embed);
+    .addField('Eylem:', 'Sunucudan atma')
+    .addField('Kullanıcı:', `${user.username}#${user.discriminator} (${user.id})`)
+    .addField('Yetkili:', `${message.author.username}#${message.author.discriminator}`)
+    .addField('Sebep', reason);
+  return message.channel.send(embed);
 };
 
 exports.conf = {
   enabled: true,
   guildOnly: true,
   aliases: ['at'],
-  permLevel: 2
+  permLevel: 2,
+  kategori: "moderasyon"
 };
 
 exports.help = {
-  name: 'kick',
+  komut: 'kick',
   description: 'İstediğiniz kişiyi sunucudan atar.',
   usage: 'kick [kullanıcı] [sebep]'
 };

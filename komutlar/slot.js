@@ -1,50 +1,38 @@
-const Discord = require("discord.js");
+const Discord = require('discord.js');
+const { Command } = require('discord.js-commando');
+const { stripIndents } = require('common-tags');
+const slots = ['🍇', '🍊', '🍐', '🍒', '🍋'];
 
-module.exports.run = async (bot, message, args) => {
-  let slots = [":smile:",  ":poop:",":rage: "];
-  let result1 = Math.floor((Math.random() * slots.length));
-  let result2 = Math.floor((Math.random() * slots.length));
-  let result3 = Math.floor((Math.random() * slots.length));
-  let name = message.author.displayName;
-  let msg = await message.channel.send("**Emoji Slot Oynatılıyor**");
-  let aicon = message.author.displayAvatarURL;    
-      if (slots[result1] === slots[result2] && slots[result3]){ 
-      let wEmbed = new Discord.RichEmbed()
-       .setFooter("Kazandınız !",aicon)
-       .setTitle(':slot_machine:Emoji Slot:slot_machine:')
-       .addField('Sonuç:', slots[result1] + slots[result2] + slots[result3], true)
-       .setColor("#f4e842");
-      await message.channel.send(wEmbed);
-       
-          }else {
-       
-       let embed = new Discord.RichEmbed()
-       .setFooter('Kaybettiniz !',aicon)
-       .setTitle(':slot_machine:Emoji Slot:slot_machine:')
-       .addField('Sonuç', slots[result1] + slots[result2] + slots[result3], true)
-       .setColor("#f4e842");
-     await  message.channel.send(embed);
-      
-       }   
-  if (slots[result1] ==  slots[result2] == slots[result1] && slots[result3] == slots[result1]){
-    let embed = new Discord.RichEmbed()
-       .setFooter('Jackpotu kazandın!',aicon)
-       .setTitle(':slot_machine:Emoji Slot:slot_machine:')
-       .addField('Sonuç', slots[result1] + slots[result2] + slots[result3], true)
-       .setColor("#f4e842");
-     await  message.channel.send(embed);
-}
-}
+exports.run = function(client, message) {
+
+	var slot1 = slots[Math.floor(Math.random() * slots.length)];
+	var slot2 = slots[Math.floor(Math.random() * slots.length)];
+	var slot3 = slots[Math.floor(Math.random() * slots.length)];
+	
+	if (slot1 === slot2 && slot1 === slot3) {
+		message.channel.send(stripIndents`
+		${slot1} : ${slot2} : ${slot3}
+		Tebrikler, kazandınız!
+		`); 
+	} else {
+		message.channel.send(stripIndents`
+		${slot1} : ${slot2} : ${slot3}
+		Eyvah, kaybettin!
+		`);	
+	}
+
+};
 
 exports.conf = {
-  enabled: true,
-  guildOnly: false,
-  aliases: ['emojislot'],
-  permLevel: 0
+  enabled: true, 
+  guildOnly: false, 
+  aliases: [],
+  permLevel: 0,
+  kategori: "eğlence"
 };
 
 exports.help = {
-  name: 'emojislot',
-  description: 'Sunucu hakkında bilgi verir.',
-  usage: 'sunucubilgi'
+  komut: 'slot', 
+  description: 'Slots oyunu oynatır',
+  usage: 'slot'
 };
